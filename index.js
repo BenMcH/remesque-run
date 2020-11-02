@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors');
 
-const {buildRouteHandler} = require('./src/index');
+const {buildRouteHandler} = require('./src/loaders/index');
 
 const app = express();
 
