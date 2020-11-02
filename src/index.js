@@ -10,9 +10,10 @@ app.use(cors());
 
 const jsExt = '.js';
 
-const functions = {}
 
 const walkDir = (dir) => {
+  const functions = {}
+
   fs.readdirSync(dir).forEach( f => {
     let dirPath = path.join(dir, f);
     const info = fs.statSync(dirPath)
@@ -23,7 +24,7 @@ const walkDir = (dir) => {
 
     let currentDirectory = functions;
 
-    directories.slice(0, directories.length - 1).forEach((directory) => {
+    directories.slice(0, directories.length - 2).forEach((directory) => {
       if (!currentDirectory[directory]) {
         currentDirectory[directory] = {}
       }
@@ -32,7 +33,7 @@ const walkDir = (dir) => {
 
 
     if (isDirectory) {
-        walkDir(dirPath);
+        currentDirectory[directories[directories.length - 1]] = walkDir(dirPath);
     } else {
       if (fullPath.endsWith(jsExt)) {
         const fileName = path.basename(fullPath);
@@ -40,16 +41,15 @@ const walkDir = (dir) => {
 
         const absolutePath = path.resolve(dir, f);
 
-        console.log({absolutePath});
         currentDirectory[fileNameWithoutJs] = require(absolutePath);
       }
     }
   });
+
+  return functions;
 };
 
-walkDir('./loaders');
-
-const getFunc = (path) => {
+const getFunc = (path, functions) => {
   const routes = path.split('/').filter(({length}) => length > 0);
 
   let obj = functions;
@@ -79,17 +79,24 @@ const getFunc = (path) => {
   return null;
 }
 
-app.get('*', async (req, res) => {
-  const searchKey = querystring.unescape(req.path);
-  
-  const func = getFunc(searchKey);
-  console.log({func});
-  if (func) {
-    res.status(200).send(await func(req));
-  } else {
-    res.status(404).send(`${req.path} not found`);
-  }
-})
+const buildRouteHandler = (dir) => {
+
+  const functions = walkDir(dir);
+
+  return async (req, res) => {
+    const searchKey = querystring.unescape(req.path);
+    
+    const func = getFunc(searchKey, functions);
+
+    if (func) {
+      res.status(200).send(await func(req));
+    } else {
+      res.status(404).send(`${req.path} not found`);
+    }
+  };
+}
+
+app.get('*', buildRouteHandler('./loaders'));
 
 app.listen(8080, function () {
   console.log('CORS-enabled web server listening on port 8080')
