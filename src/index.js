@@ -38,7 +38,10 @@ const walkDir = (dir) => {
         const fileName = path.basename(fullPath);
         const fileNameWithoutJs = fileName.slice(0, fileName.length - jsExt.length);
 
-        currentDirectory[fileNameWithoutJs] = require(`./${dirPath}`);
+        const absolutePath = path.resolve(dir, f);
+
+        console.log({absolutePath});
+        currentDirectory[fileNameWithoutJs] = require(absolutePath);
       }
     }
   });
