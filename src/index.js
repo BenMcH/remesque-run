@@ -2,14 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
 
-var express = require('express')
-var cors = require('cors');
-
-var app = express();
-app.use(cors());
-
 const jsExt = '.js';
-
 
 const walkDir = (dir) => {
   const functions = {}
@@ -94,10 +87,8 @@ const buildRouteHandler = (dir) => {
       res.status(404).send(`${req.path} not found`);
     }
   };
+};
+
+module.exports = {
+  buildRouteHandler
 }
-
-app.get('*', buildRouteHandler('./loaders'));
-
-app.listen(8080, function () {
-  console.log('CORS-enabled web server listening on port 8080')
-})
