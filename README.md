@@ -10,7 +10,7 @@ which is accomplished by generating a route map at server start time and matchin
 on parsing routes under the `loaders` directory and forming URLs based upon those.
 
 I would like to extend this to include a server-rendered react app that automatically pulls from our loaders and
-injects them into the page at runtime. If I can get something even slightly polished in the end, I will consider it a request
+injects them into the page at runtime. If I can get something even slightly polished in the end, I will consider it a success
 
 ## Comparison to Remix
 
