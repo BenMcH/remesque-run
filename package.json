@@ -1,15 +1,15 @@
 {
-  "name": "loaders-example",
+  "author": "Ben McHone",
+  "name": "remesque-run",
   "version": "0.0.1",
-  "description": "A remix-style loaders to server functions project",
+  "description": "A remix-style SSR react framework",
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./index.js",
     "test": "jest",
     "acceptance": "jest acceptance"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "GPL V3",
   "dependencies": {
     "node-fetch": "^2.6.1"
   },
