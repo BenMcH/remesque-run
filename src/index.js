@@ -17,14 +17,6 @@ const walkDir = (dir) => {
 
     let currentDirectory = functions;
 
-    directories.slice(0, directories.length - 2).forEach((directory) => {
-      if (!currentDirectory[directory]) {
-        currentDirectory[directory] = {}
-      }
-      currentDirectory = currentDirectory[directory];
-    });
-
-
     if (isDirectory) {
         currentDirectory[directories[directories.length - 1]] = walkDir(dirPath);
     } else {
